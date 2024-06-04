@@ -171,7 +171,6 @@
             <div class="order-summary">
                 <?php if (!empty($promo_code)) { ?>
                     <p>Kode Promo: <?= htmlspecialchars($promo_code); ?></p>
-                    <p>Diskon Promo: <?= formatRupiah($promo_amount); ?></p>
                 <?php } ?>
                 <p>Total Harga: <?= formatRupiah($total_price_fix); ?></p>
                 <p>Tanggal Pesanan: <?= date("d-m-Y H:i:s", strtotime($order_date)) ?></p>
