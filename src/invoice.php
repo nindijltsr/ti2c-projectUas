@@ -101,18 +101,15 @@
 
         $total_harga = 0;
         $total_diskon = 0;
-
+        
         // Perhitungan total harga dan diskon
         while ($row = $result->fetch_assoc()) {
-            $discount = $row['discount'];
-            $discount_amount = $row['item_price'] * $row['quantity'] * $discount;
-            $total_price_fix = ($row['item_price'] * $row['quantity']) - $discount_amount;
-
-            $total_diskon += $discount_amount;
+            $discount_amount = $row['item_price'] * $row['quantity'] * $row['discount'];
             $total_harga += $row['item_price'] * $row['quantity'];
         }
 
         // Penerapan diskon kode promo
+        $promo_amount = 0;
         if (!empty($promo_code)) {
             switch ($promo_code) {
                 case 'DISC25':
@@ -131,12 +128,10 @@
                     $promo_discount = 0;
                     break;
             }
+            
             $promo_amount = $total_harga * $promo_discount;
-            $total_diskon += $promo_amount;
-        } else {
-            $promo_amount = 0;
         }
-
+        $final_total_price = $total_harga -  $promo_amount;
     ?>
         <div class="invoice">
             <div class="invoice-header">
@@ -170,10 +165,13 @@
             </div>
             <div class="order-summary">
                 <?php if (!empty($promo_code)) { ?>
+                    <p>Total Harga : <?= formatRupiah($total_harga); ?> </p>
                     <p>Kode Promo: <?= htmlspecialchars($promo_code); ?></p>
+                    <p>Potongan Harga: <?= formatRupiah($promo_amount); ?></p>
+
+                    <p>---------------------------------------------------------------------------------------------------------</p>
                 <?php } ?>
-                <p>Total Harga: <?= formatRupiah($total_price_fix); ?></p>
-                <p>Tanggal Pesanan: <?= date("d-m-Y H:i:s", strtotime($order_date)) ?></p>
+                <p>Total Pembayaran: <?= formatRupiah($final_total_price); ?></p>
             </div>
             <div class="thank-you">
                 <p>Terima kasih telah berbelanja!</p>

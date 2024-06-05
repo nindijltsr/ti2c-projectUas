@@ -45,9 +45,11 @@ if (isset($_POST['place_order'])) {
         $discount_rate = $_SESSION['discount'] ?? 0; // Ambil diskon dari session
 
         foreach ($_SESSION['cart'] as $item) {
+            $item_price_original = $item['price'];
             $item_price_with_discount = $item['price'] * (1 - $discount_rate);
             $promo_code = $_SESSION['promo_code'] ?? '';
-            $stmt->bind_param("sisddss", $order_id, $user_id, $item['name'], $item_price_with_discount, $item['quantity'], $discount_rate, $promo_code);
+            $stmt->bind_param("sisddss", $order_id, $user_id, $item['name'], $item_price_original, $item['quantity'], $discount_rate, $promo_code);
+
             $stmt->execute();
         }
 
